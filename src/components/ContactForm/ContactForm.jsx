@@ -1,5 +1,8 @@
 import classes from './ContactForm.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
+import { addContact } from 'redux/contactsSlice'
+import { getContacts } from 'redux/selectors'
 import {object, string} from 'yup'
 
 const schema = object().shape({
@@ -9,7 +12,21 @@ const schema = object().shape({
         .required("Required")
 })
 
-const ContactForm = ({onAdd}) => {
+const ContactForm = () => {
+    const contacts = useSelector(getContacts)
+    const dispatch = useDispatch()
+
+    const onAdd = (newContact) => {
+        const isContactExist = contacts
+          .some(contact => contact.name.toLowerCase() === newContact.name.toLowerCase());
+        
+        if (isContactExist) {
+          alert(newContact.name + ' is already in contacts.')
+          return;
+        }
+      
+        dispatch(addContact(newContact.name, newContact.number))
+    }
 
     return (
         <Formik

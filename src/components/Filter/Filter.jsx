@@ -1,6 +1,15 @@
+import { getFilter } from 'redux/selectors';
 import classes from './Filter.module.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilter } from 'redux/filterSlice';
 
-const Filter = ({filter, onFilterChange}) => {
+const Filter = () => {
+    const filter = useSelector(getFilter)
+    const dispatch = useDispatch()
+
+    const onFilterChange = (value) => {
+        dispatch(setFilter(value))
+    }
 
     return (
         <div className={classes.filter}>
